@@ -1,16 +1,114 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Topo Escalade</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>Topo de la salle de Gorges</h1>
-  <div id="wall-container">
-    <div id="wall"></div>
-  </div>
 
-  <script src="script.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Topo Escalade</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h1>Topo de la salle de Gorges</h1>
+
+    <div id="wall-container">
+        <div id="wall">
+
+            <!-- Colonnes 1 à 21 - pas de voie 7, c'est normal -->
+
+            <div class="column" data-colonne="1">
+                <h3>Voie 1</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="2">
+                <h3>Voie 2</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="3">
+                <h3>Voie 3</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="4">
+                <h3>Voie 4</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="5">
+                <h3>Voie 5</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="6">
+                <h3>Voie 6</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="8">
+                <h3>Voie 8</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="9">
+                <h3>Voie 9</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="10">
+                <h3>Voie 10</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="11">
+                <h3>Voie 11</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="12">
+                <h3>Voie 12</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="13">
+                <h3>Voie 13</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="14">
+                <h3>Voie 14</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="15">
+                <h3>Voie 15</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="16">
+                <h3>Voie 16</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="17">
+                <h3>Voie 17</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="18">
+                <h3>Voie 18</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="19">
+                <h3>Voie 19</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="20">
+                <h3>Voie 20</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="21">
+                <h3>Voie 21</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+            <div class="column" data-colonne="22">
+                <h3>Voie 22</h3>
+                <div class="routes"></div><button type="button" class="add-voie-btn">Ajouter Voie</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="elements.js"></script>
+    <script src="routes.js"></script>
+    <script src="popup.js"></script>
+    <script src="init.js"></script>
 </body>
+
 </html>

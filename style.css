@@ -1,3 +1,12 @@
+html {
+  height: 100%;
+}
+
+:root {
+  --carousel-gap: 15px;
+  --carousel-width: calc((100vw - 85px) / 4);
+}
+
 body {
   font-family: Inter, Arial, sans-serif;
   background: #f3f4f6;
@@ -5,9 +14,11 @@ body {
   margin: 0;
   padding: 20px;
   min-height: 100vh;
+  height: 100%;
   display: grid;
   grid-template-rows: auto 1fr auto;
   justify-items: center;
+  overflow-x: hidden;
 }
 
 h1 {
@@ -19,19 +30,32 @@ h1 {
   margin: 8px 0 28px;
 }
 
-#wall-header {
-  width: calc(100vw - 40px);
-  max-width: 100%;
+#wall-scroll {
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  max-height: calc(100vh - 140px);
+}
+
+#wall-scroll > * {
+  min-width: max-content;
+}
+
+#wall-header {
   display: flex;
   gap: 15px;
   height: 100%;
-  min-height: 180px;
+  min-height: 160px;
+  max-height: 1800px;
+  width: max-content;
 }
 
 .wall-header-column {
-  flex: 0 0 calc((100% - 20 * 15px) / 21);
-  min-width: 0;
+  flex: 0 0 var(--carousel-width);
+  min-width: var(--carousel-width);
   height: 100%;
   background: #e2e8f0;
   border: 1px solid rgba(148,163,184,0.45);
@@ -42,17 +66,17 @@ h1 {
 }
 
 #wall-container {
-  width: calc(100vw - 40px);
-  max-width: 100%;
-  overflow-x: auto;
+  width: 100%;
   padding: 10px 0;
+  max-height: calc(100vh - 220px);
+  overflow-y: hidden;
 }
 
 #wall {
   display: flex;
   gap: 15px;
   padding-bottom: 20px;
-  width: 100%;
+  width: max-content;
 }
 
 * {
@@ -65,8 +89,9 @@ h1 {
   border: 1px solid #e2e8f0;
   border-radius: 15px;
   padding: 10px;
-  flex: 0 0 calc((100% - 20 * 15px) / 21);
-  max-width: calc((100% - 20 * 15px) / 21);
+  flex: 0 0 calc((100vw - 85px) / 4);
+  min-width: calc((100vw - 85px) / 4);
+  max-width: calc((100vw - 85px) / 4);
   box-shadow: 0 8px 20px rgba(15,23,42,0.06);
   display: flex;
   flex-direction: column;
@@ -265,6 +290,100 @@ h1 {
 
 .color-slider-intensity {
   background: linear-gradient(90deg, black, #888, white);
+}
+
+@media (max-width: 900px) {
+  body {
+    padding: 14px;
+    min-height: auto;
+    display: block;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 18px;
+  }
+
+  #wall-header {
+    width: 100%;
+    min-height: 120px;
+    max-height: 120px;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+  }
+
+  .wall-header-column {
+    flex: 0 0 72px;
+    min-width: 72px;
+    border-radius: 12px;
+    height: 110px;
+  }
+
+  #wall-container {
+    width: 100%;
+    padding: 6px 0 20px;
+  }
+
+  #wall {
+    gap: 12px;
+  }
+
+  .column {
+    flex: 0 0 calc((100vw - 85px) / 4);
+    max-width: calc((100vw - 85px) / 4);
+    min-width: calc((100vw - 85px) / 4);
+  }
+
+  .column h3 {
+    font-size: 13px;
+  }
+
+  .routes {
+    gap: 8px;
+  }
+
+  .route {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .add-voie-btn {
+    width: 100%;
+  }
+
+  .popup {
+    width: min(92vw, 320px);
+  }
+
+  .popup input,
+  .popup select,
+  .popup button {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .column {
+    flex: 0 0 calc((100vw - 85px) / 4);
+    max-width: calc((100vw - 85px) / 4);
+    min-width: calc((100vw - 85px) / 4);
+  }
+
+  .wall-header-column {
+    flex: 0 0 62px;
+    min-width: 62px;
+    height: 100px;
+  }
+
+  .route {
+    font-size: 13px;
+  }
+
+  .popup {
+    width: min(96vw, 300px);
+    padding: 16px;
+  }
 }
 
 /* Popup détails */

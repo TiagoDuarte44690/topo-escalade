@@ -1,7 +1,7 @@
 /* --- BASE --- */
 :root {
-  --gap: 15px;
-  --col-width: calc((100vw - 85px) / 4);
+  --gap: 30px; /* x2 */
+  --col-width: calc((100vw - 85px) / 4 * 2); /* x2 */
   --dark: #334155;
 }
 
@@ -14,7 +14,7 @@ body {
   background: #f3f4f6;
   color: #0f172a;
   margin: 0;
-  padding: 20px;
+  padding: 40px; /* x2 */
   display: grid;
   grid-template-rows: auto 1fr;
   justify-items: center;
@@ -23,8 +23,8 @@ body {
 h1 {
   text-align: center;
   text-transform: uppercase;
-  font-size: 2.4rem;
-  margin: 10px 0 25px;
+  font-size: 4.8rem; /* x2 */
+  margin: 20px 0 50px; /* x2 */
 }
 
 /* --- WALL --- */
@@ -37,7 +37,7 @@ h1 {
   display: flex;
   gap: var(--gap);
   width: max-content;
-  padding-bottom: 20px;
+  padding-bottom: 40px; /* x2 */
 }
 
 /* --- COLUMN --- */
@@ -45,30 +45,30 @@ h1 {
   flex: 0 0 var(--col-width);
   min-width: var(--col-width);
   background: #fff;
-  border-radius: 15px;
-  padding: 10px;
+  border-radius: 30px; /* x2 */
+  padding: 20px; /* x2 */
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.05); /* x2 */
 }
 
 .column h3 {
-  margin: 0 0 10px;
-  font-size: 14px;
+  margin: 0 0 20px; /* x2 */
+  font-size: 28px; /* x2 */
 }
 
 .routes {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 12px; /* x2 */
 }
 
 /* --- ROUTE --- */
 .route {
-  padding: 6px 10px;
-  border-radius: 8px;
+  padding: 12px 20px; /* x2 */
+  border-radius: 16px; /* x2 */
   color: white;
   cursor: pointer;
   display: flex;
@@ -78,12 +78,13 @@ h1 {
 /* --- BUTTON --- */
 button {
   border: none;
-  border-radius: 8px;
-  padding: 8px;
+  border-radius: 16px; /* x2 */
+  padding: 16px; /* x2 */
   cursor: pointer;
   background: var(--dark);
   color: #fff;
   transition: 0.2s;
+  height: 4vh;
 }
 
 button:hover {
@@ -92,7 +93,7 @@ button:hover {
 
 .add-voie-btn {
   width: 100%;
-  margin-top: 8px;
+  margin-top: 16px; /* x2 */
 }
 
 /* --- POPUP --- */
@@ -107,19 +108,21 @@ button:hover {
 
 .popup {
   background: #fff;
-  padding: 18px;
-  border-radius: 14px;
-  width: 280px;
+  padding: 36px; /* x2 */
+  border-radius: 28px; /* x2 */
+  width: 90vw; /* x2 */
+  height: 80vw; /* x2 */
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px; /* x2 */
 }
 
 .popup input,
 .popup select {
-  padding: 10px;
-  border-radius: 8px;
+  padding: 20px; /* x2 */
+  border-radius: 16px; /* x2 */
   border: 1px solid #ccc;
+  font-size: 3rem; /* x2 approx */
 }
 
 /* --- CUSTOM SELECT --- */
@@ -132,12 +135,12 @@ button:hover {
   width: 100%;
   background: #fff;
   border: 1px solid #ccc;
-  max-height: 150px;
+  max-height: 300px; /* x2 */
   overflow: auto;
 }
 
 .custom-select-option {
-  padding: 8px;
+  padding: 16px; /* x2 */
   cursor: pointer;
 }
 
@@ -153,36 +156,19 @@ button:hover {
 .color-palette {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px; /* x2 */
 }
 
 .color-preview {
-  height: 40px;
-  border-radius: 12px;
-  border: 1px solid #ccc;
+  height: 80px; /* x2 */
+  border-radius: 24px; /* x2 */
+  border: 2px solid #ccc; /* x2 */
 }
 
 .color-slider {
   width: 100%;
-  height: 12px;
+  height: 24px; /* x2 */
   border-radius: 999px;
   appearance: none;
 }
 
-/* --- MOBILE --- */
-@media (max-width: 900px) {
-  body {
-    padding: 12px;
-  }
-  h1 {
-    font-size: 2rem;
-  }
-
-  .column {
-    flex: 0 0 var(--col-width);
-  }
-
-  .popup {
-    width: 90vw;
-  }
-}

@@ -7,6 +7,7 @@
 
 * {
   box-sizing: border-box;
+  font-size: var(--font-size-base);
 }
 
 body {
@@ -42,18 +43,16 @@ h1 {
 
 /* --- COLUMN --- */
 .column {
-  flex: 0 0 var(--col-width);
-  min-width: var(--col-width);
+  width: 20vw;
   background: #fff;
-  border-radius: 30px; /* x2 */
-  padding: 20px; /* x2 */
+  border-radius: 20px; /* x2 */
+  padding: 0.1%; /* x2 */
   display: flex;
   flex-direction: column;
-  align-items: center;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.05); /* x2 */
+  align-items: center;  
 }
 
-.column h3 {
+.column h1 {
   margin: 0 0 20px; /* x2 */
   font-size: 28px; /* x2 */
 }

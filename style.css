@@ -22,7 +22,7 @@ h1 {
 #wall {
   display: flex;
   gap: 10px;
-  padding: 5px;
+  padding: 10px;
 
   scroll-snap-type: x mandatory;
 }
@@ -30,7 +30,7 @@ h1 {
 /* --- COLUMN --- */
 .column {
   flex: 0 0 auto; /* empêche écrasement */
-  width: clamp(110px, 32vw, 180px);
+  width: calc((100vw - 40px) / 4); 
   min-height: 200px;
 
   background: #fff;

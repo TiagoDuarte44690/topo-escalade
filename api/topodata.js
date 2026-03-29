@@ -4,63 +4,73 @@ import fetch from "node-fetch";
 const GITHUB_REPO = "TiagoDuarte44690/topo-escalade";
 const FILE_PATH = "topodata.json";
 const BRANCH = "main";
-const TOKEN = process.env.GITHUB_TOKEN; // doit être défini sur Vercel
+const TOKEN = process.env.GITHUB_TOKEN;
 
-// --- Récupérer les données depuis GitHub ---
 async function fetchFromGitHub() {
+  if (!TOKEN) throw new Error("GITHUB_TOKEN non défini");
+  
   const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}?ref=${BRANCH}`, {
     headers: { Authorization: `token ${TOKEN}` }
   });
-  if(res.status === 404) return { voies: [], ouvreurs: [] }; // fichier inexistant
-  if(!res.ok) throw new Error(`GitHub GET error: ${res.status}`);
+
+  if (res.status === 404) return { content: { voies: [], ouvreurs: [] }, sha: undefined };
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("GitHub GET failed:", res.status, text);
+    throw new Error(`GitHub GET error: ${res.status}`);
+  }
+
   const data = await res.json();
-  const content = JSON.parse(Buffer.from(data.content, "base64").toString());
+  let content;
+  try {
+    content = JSON.parse(Buffer.from(data.content, "base64").toString());
+  } catch(e) {
+    console.error("Erreur parsing content GitHub:", e, data.content);
+    content = { voies: [], ouvreurs: [] };
+  }
+  
   return { content, sha: data.sha };
 }
 
-// --- Envoyer les données vers GitHub ---
 async function pushToGitHub(content, sha) {
   const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}`, {
     method: "PUT",
-    headers: { 
-      Authorization: `token ${TOKEN}`, 
-      "Content-Type": "application/json" 
-    },
+    headers: { Authorization: `token ${TOKEN}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       message: "Mise à jour topodata.json via Vercel",
       content: Buffer.from(JSON.stringify(content, null, 2)).toString("base64"),
-      sha, // undefined si fichier inexistant → GitHub crée le fichier
+      sha,
       branch: BRANCH
     })
   });
-  if(!res.ok) throw new Error(`GitHub PUT error: ${res.status}`);
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("GitHub PUT failed:", res.status, text);
+    throw new Error(`GitHub PUT error: ${res.status}`);
+  }
 }
 
-// --- Handler API ---
 export default async function handler(req, res) {
-  if(!TOKEN) return res.status(500).json({ error: "TOKEN GitHub non défini" });
+  try {
+    if (!TOKEN) return res.status(500).json({ error: "GITHUB_TOKEN non défini" });
 
-  if(req.method === "GET") {
-    try {
+    if (req.method === "GET") {
       const { content } = await fetchFromGitHub();
-      res.status(200).json(content);
-    } catch(err) {
-      console.error(err);
-      res.status(500).json({ error: "Impossible de récupérer les données depuis GitHub" });
+      return res.status(200).json(content);
     }
-  } 
-  else if(req.method === "POST") {
-    try {
+
+    if (req.method === "POST") {
       const body = req.body;
-      const { sha } = await fetchFromGitHub(); // récupère sha si existant
+      const { sha } = await fetchFromGitHub();
       await pushToGitHub(body, sha);
-      res.status(200).json(body);
-    } catch(err) {
-      console.error(err);
-      res.status(500).json({ error: "Impossible de sauvegarder les données sur GitHub" });
+      return res.status(200).json(body);
     }
-  } 
-  else {
-    res.status(405).json({ error: "Méthode non autorisée" });
+
+    return res.status(405).json({ error: "Méthode non autorisée" });
+
+  } catch (err) {
+    console.error("Erreur handler:", err);
+    return res.status(500).json({ error: err.message });
   }
 }

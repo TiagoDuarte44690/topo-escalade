@@ -5,7 +5,7 @@ module.exports = async function handler(req, res) {
   if (!process.env.GITHUB_TOKEN) {
     return res.status(500).json({ error: "TOKEN GitHub non défini" });
   }
-
+ 
   if (req.method === "GET") {
     return res.status(200).json({ voies: [], ouvreurs: [] });
   }

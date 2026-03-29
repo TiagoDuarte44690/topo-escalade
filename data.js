@@ -1,185 +1,142 @@
-// data
-const grades = ["4a", "4a+", "4b", "4b+", "4c", "4c+", "5a", "5a+", "5b", "5b+", "5c", "5c+",
-    "6a", "6a+", "6b", "6b+", "6c", "6c+", "7a", "7a+", "7b", "7b+", "7c", "7c+",
-    "8a", "8a+", "8b", "8b+", "8c", "8c+", "9a", "9a+", "9b", "9b+", "9c", "9c+"];
+// --- DATA ---
+const grades = [
+  "4a","4a+","4b","4b+","4c","4c+","5a","5a+","5b","5b+","5c","5c+",
+  "6a","6a+","6b","6b+","6c","6c+","7a","7a+","7b","7b+","7c","7c+",
+  "8a","8a+","8b","8b+","8c","8c+","9a","9a+","9b","9b+","9c","9c+"
+];
 
+// --- JSON COMMUN ---
 let jsonData = JSON.parse(localStorage.getItem("topoData")) || { voies: [], ouvreurs: [] };
+function saveData() { localStorage.setItem("topoData", JSON.stringify(jsonData)); }
 
-function saveData() {
-    localStorage.setItem("topoData", JSON.stringify(jsonData));
+// --- UTILITAIRES ---
+function median(cotation, votes = []) {
+  if(!votes.length) return cotation;
+  const all = [cotation, ...votes].map(x => grades.indexOf(x)).sort((a,b)=>a-b);
+  return grades[all[Math.floor(all.length/2)]];
 }
 
-function median(g, votes = []) {
-    if (!votes.length) return g;
-    const all = [g, ...votes].map(x => grades.indexOf(x)).sort((a, b) => a - b);
-    return grades[all[Math.floor(all.length / 2)]];
-}
-
-// elements
-function createInput(val = "", ph = "") {
-    const i = document.createElement("input");
-    i.value = val;
-    i.placeholder = ph;
-    return i;
+function createInput(val="", ph="") {
+  const i = document.createElement("input");
+  i.value = val; i.placeholder = ph; return i;
 }
 
 function createSelect(arr, val) {
-    const s = document.createElement("select");
-    arr.forEach(g => {
-        const o = document.createElement("option");
-        o.value = o.innerText = g;
-        if (g === val) o.selected = true;
-        s.appendChild(o);
-    });
-    return s;
+  const s = document.createElement("select");
+  arr.forEach(g=>{
+    const o = document.createElement("option");
+    o.value = o.text = g;
+    if(g===val) o.selected = true;
+    s.appendChild(o);
+  });
+  return s;
 }
 
-function createColorPalette(val = "#888") {
-    const container = document.createElement("div");
-    const input = document.createElement("input");
-    input.type = "color";
-    input.value = val;
-    container.appendChild(input);
-    return {
-        container,
-        getValue: () => input.value
-    };
-}
-
-function createOuvreurSelect(val = "") {
-    const container = document.createElement("div");
-    const input = document.createElement("input");
-    input.placeholder = "Ouvreur";
-    input.value = val;
-    container.appendChild(input);
-    return { container, input };
-}
-
-// routes
+// --- ROUTES ---
 const wall = document.getElementById("wall");
 
 function addRoute(v, container) {
-    const div = document.createElement("div");
-    div.className = "route";
-    div.style.background = v.couleur;
-    div.innerHTML = `<span>${v.nom} ${median(v.cotation, v.votes)}</span>`;
-    div.onclick = () => openPopup({ ...v, element: div, container });
-    container.appendChild(div);
+  const div = document.createElement("div");
+  div.className = "route";
+  div.style.background = v.couleur;
+  div.innerHTML = `<span>${v.nom} ${median(v.cotation, v.votes)}</span>`;
+  div.onclick = () => openPopup({...v, element: div, container});
+  container.appendChild(div);
 }
 
-
-function openPopup(v = {}) {
+// --- POPUP ---
+function openPopup(v={}) {
   const isEdit = !!v.element;
+  const overlay = document.createElement("div"); overlay.className="popup-overlay";
+  const popup = document.createElement("div"); popup.className="popup";
 
-  // overlay
-  const overlay = document.createElement("div");
-  overlay.className = "popup-overlay";
+  // Form row : champs + couleur
+  const formRow = document.createElement("div"); formRow.className="form-row";
+  const fields = document.createElement("div"); fields.className="fields";
 
-  // popup
-  const popup = document.createElement("div");
-  popup.className = "popup";
+  const inputNom = createInput(v.nom||"","Nom");
+  const selectGrade = createSelect(grades, v.cotation);
+  const ouvreurInput = createInput(v.ouvreur||"","Ouvreur");
 
-  // inputs
-  const inputNom = document.createElement("input");
-  inputNom.placeholder = "Nom";
-  inputNom.value = v.nom || "";
+  fields.append(inputNom, selectGrade, ouvreurInput);
 
-  const selectGrade = document.createElement("select");
-  grades.forEach(g => {
-    const option = document.createElement("option");
-    option.value = option.text = g;
-    if (g === v.cotation) option.selected = true;
-    selectGrade.appendChild(option);
-  });
+  const colorDiv = document.createElement("div"); colorDiv.className="color-picker";
+  colorDiv.style.backgroundColor = v.couleur||"#888";
 
   const colorInput = document.createElement("input");
-  colorInput.type = "color";
-  colorInput.value = v.couleur || "#888";
+  colorInput.type = "color"; colorInput.value = v.couleur||"#888";
+  colorInput.addEventListener("input", ()=> colorDiv.style.backgroundColor=colorInput.value);
+  colorDiv.appendChild(colorInput);
 
-  const ouvreurInput = document.createElement("input");
-  ouvreurInput.placeholder = "Ouvreur";
-  ouvreurInput.value = v.ouvreur || "";
+  formRow.append(fields, colorDiv);
 
-  // votes
-  const votes = v.votes || [];
-  const votesDiv = document.createElement("div");
-  votesDiv.className = "votes-list";
-  function renderVotes() {
+  // Votes
+  const votes = v.votes||[];
+  const votesDiv = document.createElement("div"); votesDiv.className="votes-list";
+  function renderVotes(){
     votesDiv.innerHTML = votes.length
-      ? votes.map((vote, i) => `<div>${vote} <button data-i="${i}">×</button></div>`).join("")
+      ? votes.map((vote,i)=>`<div>${vote} <button data-i="${i}">×</button></div>`).join("")
       : "<i>Aucun vote</i>";
   }
   renderVotes();
-
-  votesDiv.addEventListener("click", e => {
-    if (e.target.tagName === "BUTTON") {
-      votes.splice(e.target.dataset.i, 1);
-      renderVotes();
-    }
+  votesDiv.addEventListener("click", e=>{
+    if(e.target.tagName==="BUTTON"){ votes.splice(e.target.dataset.i,1); renderVotes(); }
   });
 
-  // buttons
-  const saveBtn = document.createElement("button");
-  saveBtn.className = "save";
-  saveBtn.textContent = "Enregistrer";
-  saveBtn.onclick = () => {
+  // Buttons
+  const buttonsRow = document.createElement("div"); buttonsRow.className="buttons-row";
+
+  const saveBtn = document.createElement("button"); saveBtn.className="save"; saveBtn.textContent="Enregistrer";
+  saveBtn.onclick = ()=>{
     const newV = {
-      nom: inputNom.value || "?",
+      nom: inputNom.value||"?",
       cotation: selectGrade.value,
       couleur: colorInput.value,
       colonne: v.colonne,
-      ouvreur: ouvreurInput.value || "?",
-      dateCreation: v.dateCreation || new Date().toISOString(),
+      ouvreur: ouvreurInput.value||"?",
+      dateCreation: v.dateCreation||new Date().toISOString(),
       votes
     };
-
-    if (isEdit) {
-      Object.assign(v, newV);
-      v.element.style.background = newV.couleur;
-      v.element.querySelector("span").innerText = `${newV.nom} ${median(newV.cotation, votes)}`;
+    if(isEdit){
+      Object.assign(v,newV);
+      v.element.style.background=newV.couleur;
+      v.element.querySelector("span").innerText=`${newV.nom} ${median(newV.cotation,votes)}`;
     } else {
       jsonData.voies.push(newV);
-      addRoute(newV, v.container);
+      addRoute(newV,v.container);
     }
-
-    if (!jsonData.ouvreurs.includes(newV.ouvreur)) jsonData.ouvreurs.push(newV.ouvreur);
+    if(!jsonData.ouvreurs.includes(newV.ouvreur)) jsonData.ouvreurs.push(newV.ouvreur);
     saveData();
     overlay.remove();
   };
 
-  const delBtn = document.createElement("button");
-  delBtn.className = "delete";
-  delBtn.textContent = "Supprimer";
-  delBtn.onclick = () => {
-    jsonData.voies = jsonData.voies.filter(x => x !== v);
+  const delBtn = document.createElement("button"); delBtn.className="delete"; delBtn.textContent="Supprimer";
+  delBtn.onclick = ()=>{
+    jsonData.voies = jsonData.voies.filter(x=>x!==v);
     v.element?.remove();
     saveData();
     overlay.remove();
   };
 
-  const closeBtn = document.createElement("button");
-  closeBtn.className = "close";
-  closeBtn.textContent = "Fermer";
-  closeBtn.onclick = () => overlay.remove();
+  const closeBtn = document.createElement("button"); closeBtn.className="close"; closeBtn.textContent="Fermer";
+  closeBtn.onclick = ()=> overlay.remove();
 
-  // assemble popup
-  popup.append(inputNom, selectGrade, colorInput, ouvreurInput, votesDiv, saveBtn);
-  if (isEdit) popup.appendChild(delBtn);
-  popup.appendChild(closeBtn);
+  buttonsRow.append(saveBtn); if(isEdit) buttonsRow.append(delBtn); buttonsRow.append(closeBtn);
 
+  // Assemble popup
+  popup.append(formRow,votesDiv,buttonsRow);
   overlay.appendChild(popup);
   document.body.appendChild(overlay);
 }
 
-// init
-document.querySelectorAll(".column").forEach(col => {
-    const routesDiv = col.querySelector(".routes");
-    col.querySelector(".add-voie-btn").onclick = () =>
-        openPopup({ colonne: +col.dataset.colonne, container: routesDiv });
+// --- INIT ---
+document.querySelectorAll(".column").forEach(col=>{
+  const routesDiv = col.querySelector(".routes");
+  col.querySelector(".add-voie-btn").onclick = ()=> openPopup({colonne:+col.dataset.colonne, container:routesDiv});
 });
 
-// reload existing data
-jsonData.voies.forEach(v => {
-    const col = wall.querySelector(`.column[data-colonne='${v.colonne}'] .routes`);
-    if (col) addRoute(v, col);
+// Reload existing data
+jsonData.voies.forEach(v=>{
+  const col = wall.querySelector(`.column[data-colonne='${v.colonne}'] .routes`);
+  if(col) addRoute(v,col);
 });

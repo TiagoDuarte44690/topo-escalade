@@ -101,21 +101,80 @@ button {
 
   min-height: 44px; /* important mobile */
 }
+/* --- POPUP OVERLAY --- */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
 /* --- POPUP --- */
 .popup {
-  width: 90vw;
-  max-width: 400px;
-  padding: 15px;
+  background: #fff;
   border-radius: 15px;
-
+  padding: 25px;
+  width: 80vw;          /* agrandi à 80% de l'écran */
+  max-width: 600px;      /* limite pour grand écran */
+  min-width: 300px;      /* minimum confortable sur mobile */
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 
+/* INPUTS & SELECT */
 .popup input,
-.popup select {
-  padding: 10px;
+.popup select,
+.popup input[type="color"] {
+  padding: 12px;
   font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* VOTES LIST */
+.popup .votes-list {
+  max-height: 160px;      /* un peu plus grand pour le scroll */
+  overflow-y: auto;
+  border: 1px solid #eee;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.popup .votes-list div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0;
+}
+
+/* BUTTONS */
+.popup button {
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.popup button.save {
+  background-color: #09002f;
+  color: #fff;
+}
+
+.popup button.delete {
+  background-color: #b91c1c;
+  color: #fff;
+}
+
+.popup button.close {
+  background-color: #888;
+  color: #fff;
 }

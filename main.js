@@ -1,5 +1,5 @@
 // === CONFIGURATION API ===
-const API_URL = "/api/topodata"; // endpoint Vercel
+const API_URL = "/api/topodata.js"; // endpoint Vercel
 
 // === GRADES ===
 const grades = ["4a","4a+","4b","4b+","4c","4c+",

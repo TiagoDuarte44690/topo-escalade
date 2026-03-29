@@ -17,20 +17,24 @@ h1 {
 #wall-container {
   width: 100%;
   overflow-x: auto;
+
+  scroll-padding-left: 10px;   /* marge gauche au scroll */
+  scroll-padding-right: 10px;  /* marge droite au scroll */
 }
 
 #wall {
   display: flex;
   gap: 10px;
-  padding: 10px;
+
+  /* plus de padding sur #wall */
+  padding: 0;
 
   scroll-snap-type: x mandatory;
 }
 
-/* --- COLUMN --- */
 .column {
-  flex: 0 0 auto; /* empêche écrasement */
-  width: calc((100vw - 40px) / 4); 
+  flex: 0 0 auto;
+  width: calc((96% - 40px) / 3); /* 3 colonnes visibles, gap inclus */
   min-height: 200px;
 
   background: #fff;
